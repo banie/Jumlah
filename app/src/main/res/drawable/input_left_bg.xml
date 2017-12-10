@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:shape="rectangle">
+  <corners
+    android:radius="1dp"
+    android:bottomRightRadius="0dp"
+    android:bottomLeftRadius="@dimen/circular_corner_radius"
+    android:topLeftRadius="@dimen/circular_corner_radius"
+    android:topRightRadius="0dp" />
+  <stroke
+    android:color="@color/button_colour"
+    android:width="@dimen/outline_stroke_width" />
+  <solid android:color="@color/button_colour" />
+</shape>

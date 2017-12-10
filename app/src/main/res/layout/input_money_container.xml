@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+  tools:showIn="@layout/main_cordinator"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".MainActivity">
+
+  <android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:paddingStart="10dp"
+    android:paddingLeft="10dp"
+    android:paddingEnd="10dp"
+    android:paddingRight="10dp">
+
+    <include
+      android:id="@+id/cash_input1"
+      style="@style/MoneyInputStyleLeft"
+      layout="@layout/money_input"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/cash_input2"
+      app:layout_constraintHorizontal_chainStyle="spread" />
+
+    <include
+      android:id="@+id/cash_input2"
+      style="@style/MoneyInputStyleRight"
+      layout="@layout/money_input"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintStart_toEndOf="@id/cash_input1" />
+
+    <include
+      android:id="@+id/cash_input3"
+      style="@style/MoneyInputStyleLeft"
+      layout="@layout/money_input"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/cash_input2"
+      app:layout_constraintEnd_toStartOf="@id/cash_input4"
+      app:layout_constraintHorizontal_chainStyle="spread" />
+
+    <include
+      android:id="@+id/cash_input4"
+      style="@style/MoneyInputStyleRight"
+      layout="@layout/money_input"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="@id/cash_input3"
+      app:layout_constraintStart_toEndOf="@id/cash_input3" />
+
+    <include
+      android:id="@+id/cash_input5"
+      style="@style/MoneyInputStyleLeft"
+      layout="@layout/money_input"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/cash_input3"
+      app:layout_constraintEnd_toStartOf="@id/cash_input6"
+      app:layout_constraintHorizontal_chainStyle="spread" />
+
+    <include
+      android:id="@+id/cash_input6"
+      style="@style/MoneyInputStyleRight"
+      layout="@layout/money_input"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="@id/cash_input5"
+      app:layout_constraintStart_toEndOf="@id/cash_input5" />
+
+    <include
+      android:id="@+id/cash_input7"
+      style="@style/MoneyInputStyleLeft"
+      layout="@layout/money_input"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/cash_input5"
+      app:layout_constraintEnd_toStartOf="@id/cash_input8"
+      app:layout_constraintHorizontal_chainStyle="spread" />
+
+    <include
+      android:id="@+id/cash_input8"
+      style="@style/MoneyInputStyleRight"
+      layout="@layout/money_input"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="@id/cash_input7"
+      app:layout_constraintStart_toEndOf="@id/cash_input7" />
+
+    <include
+      android:id="@+id/cash_input9"
+      style="@style/MoneyInputStyleLeft"
+      layout="@layout/money_input"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/cash_input7"
+      app:layout_constraintEnd_toStartOf="@id/cash_input10"
+      app:layout_constraintHorizontal_chainStyle="spread" />
+
+    <include
+      android:id="@+id/cash_input10"
+      style="@style/MoneyInputStyleRight"
+      layout="@layout/money_input"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="@id/cash_input9"
+      app:layout_constraintStart_toEndOf="@id/cash_input9" />
+
+  </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>
