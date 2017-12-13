@@ -17,7 +17,9 @@
     android:paddingStart="10dp"
     android:paddingLeft="10dp"
     android:paddingEnd="10dp"
-    android:paddingRight="10dp">
+    android:paddingRight="10dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <include
       android:id="@+id/cash_input1"
@@ -103,6 +105,15 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintBottom_toBottomOf="@id/cash_input9"
       app:layout_constraintStart_toEndOf="@id/cash_input9" />
+
+    <include
+      android:id="@+id/cash_input11"
+      style="@style/MoneyInputStyleLeft"
+      layout="@layout/money_input"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/cash_input9"
+      app:layout_constraintEnd_toEndOf="@id/cash_input9"
+      app:layout_constraintHorizontal_chainStyle="spread" />
 
   </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>
