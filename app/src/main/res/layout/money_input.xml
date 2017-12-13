@@ -7,17 +7,19 @@
   android:orientation="horizontal">
 
   <Button
+    android:id="@+id/input_btn"
     android:layout_width="0dp"
     android:layout_height="@dimen/money_input_height"
     android:background="@drawable/input_left_bg"
     android:layout_weight="1"
-    android:textColor="@color/midnightblue"
+    android:textColor="@color/wetasphalt"
     android:textSize="@dimen/money_text_height"
+    android:textAllCaps="false"
     android:typeface="monospace"
-    tools:text="$20" />
+    tools:text="1 ¢" />
 
   <EditText
-    android:id="@+id/input1"
+    android:id="@+id/input_text"
     android:layout_width="80dp"
     android:layout_height="@dimen/money_input_height"
     android:maxWidth="120dp"
