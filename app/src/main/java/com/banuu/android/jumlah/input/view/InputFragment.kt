@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.banuu.android.jumlah.R
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.input_money_container.*
 
 /**
@@ -18,19 +19,22 @@ import kotlinx.android.synthetic.main.input_money_container.*
 
 class InputFragment : Fragment() {
 
-  var total = 0.0
+  private var total = 0.0
+  private lateinit var cashInputArray: Array<View>
+  private lateinit var cashInputStream: Observable<List<Pair<String, Int>>>
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View = inflater.inflate(
       R.layout.input_money_container, container, false)
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    val cashList = arrayOf<View>(cash_input1, cash_input2, cash_input3, cash_input4, cash_input5,
-                                 cash_input6, cash_input7, cash_input8, cash_input9, cash_input10,
-                                 cash_input11)
+    cashInputArray = arrayOf(cash_input1, cash_input2, cash_input3, cash_input4, cash_input5,
+                             cash_input6, cash_input7, cash_input8, cash_input9, cash_input10,
+                             cash_input11)
 
-    for (i in cashList.indices) {
-      val button = cashList[i].findViewById<Button>(R.id.input_btn)
+    var prevObservable: Observable<List<Pair<String, Int>>>? = null
+    for (i in cashInputArray.indices) {
+      val button = cashInputArray[i].findViewById<Button>(R.id.input_btn)
       when (i) {
         0 -> button.text = "$100"
         1 -> button.text = "$50"
@@ -44,15 +48,52 @@ class InputFragment : Fragment() {
         9 -> button.text = "5 ¢"
         10 -> button.text = "1 ¢"
       }
-      val editText = cashList[i].findViewById<EditText>(R.id.input_text)
-      editText.onTextChanged {
-        total = getSum()
-      }
+      val editText = cashInputArray[i].findViewById<EditText>(R.id.input_text)
       editText.setOnFocusChangeListener { view, b ->
         if (b) editText.hint = ""
         else editText.hint = "0"
       }
       editText.clearFocus()
+
+      if (i == 0) {
+        prevObservable = makeCashObservable(editText)
+      } else {
+        cashInputStream = Observable.merge(prevObservable, makeCashObservable(editText))
+      }
+    }
+  }
+
+  private fun makeCashObservable(editText: EditText): Observable<List<Pair<String, Int>>> {
+    return Observable.create<List<Pair<String, Int>>> { emitter ->
+
+      editText.onTextChanged {
+        val pairList = mutableListOf<Pair<String, Int>>()
+        for (i in cashInputArray.indices) {
+          val cashNum = cashInputArray[i].findViewById<EditText>(R.id.input_text).text
+          var pair: Pair<String, Int>
+          when (i) {
+            0 -> pair = Pair("$100 x " + cashNum, cashNum.toString().toInt())
+            1 -> pair = Pair("$50 x " + cashNum, cashNum.toString().toInt())
+            2 -> pair = Pair("$20 x " + cashNum, cashNum.toString().toInt())
+            3 -> pair = Pair("$10 x " + cashNum, cashNum.toString().toInt())
+            4 -> pair = Pair("$5 x " + cashNum, cashNum.toString().toInt())
+            5 -> pair = Pair("$2 x " + cashNum, cashNum.toString().toInt())
+            6 -> pair = Pair("$1 x " + cashNum, cashNum.toString().toInt())
+            7 -> pair = Pair("25¢ x " + cashNum, cashNum.toString().toInt())
+            8 -> pair = Pair("10¢ x " + cashNum, cashNum.toString().toInt())
+            9 -> pair = Pair("5¢ x " + cashNum, cashNum.toString().toInt())
+            10 -> pair = Pair("1¢ x " + cashNum, cashNum.toString().toInt())
+            else -> pair = Pair("0 x 0", 0)
+          }
+          pairList.add(pair)
+        }
+
+        emitter.onNext(pairList)
+      }
+
+      emitter.setCancellable {
+        editText.setOnClickListener(null)
+      }
     }
   }
 
