@@ -45,7 +45,7 @@ class InputFragment : Fragment() {
         10 -> button.text = "1 ¢"
       }
       val editText = cashList[i].findViewById<EditText>(R.id.input_text)
-      editText.afterTextChanged {
+      editText.onTextChanged {
         total = getSum()
       }
       editText.setOnFocusChangeListener { view, b ->
@@ -74,16 +74,14 @@ class InputFragment : Fragment() {
   }
 }
 
-fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+fun EditText.onTextChanged(onTextChanged: (String) -> Unit) {
   this.addTextChangedListener(object : TextWatcher {
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-    }
+    override fun afterTextChanged(s: Editable?) = Unit
 
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-    }
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
-    override fun afterTextChanged(editable: Editable?) {
-      afterTextChanged.invoke(editable.toString())
+    override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+      onTextChanged.invoke(s.toString())
     }
   })
 }
