@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.input_money_container.*
 
 class InputFragment : Fragment() {
 
-  public lateinit var cashInputStream: Observable<List<Pair<String, Double>>>
+  lateinit var cashInputStream: Observable<List<Pair<String, Double>>>
   private lateinit var cashInputArray: Array<View>
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +32,6 @@ class InputFragment : Fragment() {
         cash_input6, cash_input7, cash_input8, cash_input9, cash_input10,
         cash_input11)
 
-    var prevObservable: Observable<List<Pair<String, Double>>>? = null
     for (i in cashInputArray.indices) {
       val button = cashInputArray[i].findViewById<Button>(R.id.input_btn)
       when (i) {
@@ -56,9 +55,9 @@ class InputFragment : Fragment() {
       editText.clearFocus()
 
       if (i == 0) {
-        prevObservable = makeCashObservable(editText)
+        cashInputStream = makeCashObservable(editText)
       } else {
-        cashInputStream = Observable.merge(prevObservable, makeCashObservable(editText))
+        cashInputStream = Observable.merge(cashInputStream, makeCashObservable(editText))
       }
     }
   }
@@ -70,7 +69,7 @@ class InputFragment : Fragment() {
         val pairList = mutableListOf<Pair<String, Double>>()
         for (i in cashInputArray.indices) {
           val cashNum = cashInputArray[i].findViewById<EditText>(R.id.input_text).text
-          val cashInt = cashNum.toString().toInt()
+          val cashInt = if (cashNum.isNotEmpty()) cashNum.toString().toInt() else 0
           if (cashInt > 0) {
             var pair: Pair<String, Double>
             when (i) {
