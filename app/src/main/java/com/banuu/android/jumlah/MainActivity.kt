@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun computeSum(cashList: List<Pair<String, Double>>) {
+    totalLabel = ""
     totalSum = 0.0
     for (cash in cashList) {
       totalLabel += "(" + cash.first + ")" + if (cash != cashList.last()) " + " else ""
