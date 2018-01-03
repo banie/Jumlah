@@ -13,7 +13,7 @@
     android:background="@drawable/input_left_bg"
     android:layout_weight="1"
     android:textColor="@color/wetasphalt"
-    android:textSize="@dimen/money_text_height"
+    android:textSize="@dimen/money_view_height"
     android:textAllCaps="false"
     android:typeface="monospace"
     tools:text="1 ¢" />
@@ -32,7 +32,7 @@
     android:textColor="@color/white"
     android:textColorHint="@color/white"
     android:textCursorDrawable="@color/white"
-    android:textSize="@dimen/money_text_height"
+    android:textSize="@dimen/money_edit_height"
     android:typeface="sans" />
 
 </LinearLayout>

@@ -13,5 +13,6 @@
   <dimen name="outline_stroke_width">2dp</dimen>
   <dimen name="money_input_height">60dp</dimen>
   <dimen name="money_input_vertical_spacing">20dp</dimen>
-  <dimen name="money_text_height">20sp</dimen>
+  <dimen name="money_view_height">25sp</dimen>
+  <dimen name="money_edit_height">30sp</dimen>
 </resources>
