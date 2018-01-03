@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.banuu.android.jumlah.R
+import io.reactivex.Emitter
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.input_money_container.*
 
@@ -21,6 +22,7 @@ class InputFragment : Fragment() {
 
   lateinit var cashInputStream: Observable<List<Pair<String, Double>>>
   private lateinit var cashInputArray: Array<View>
+  private lateinit var cashInputEmitter: Emitter<List<Pair<String, Double>>>
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View = inflater.inflate(
@@ -62,34 +64,17 @@ class InputFragment : Fragment() {
     }
   }
 
+  override fun onResume() {
+    super.onResume()
+
+    cashInputEmitter.onNext(composeValueList())
+  }
+
   private fun makeCashObservable(editText: EditText): Observable<List<Pair<String, Double>>> {
     return Observable.create<List<Pair<String, Double>>> { emitter ->
 
       editText.onTextChanged {
-        val pairList = mutableListOf<Pair<String, Double>>()
-        for (i in cashInputArray.indices) {
-          val cashNum = cashInputArray[i].findViewById<EditText>(R.id.input_text).text
-          val cashInt = if (cashNum.isNotEmpty()) cashNum.toString().toInt() else 0
-          if (cashInt > 0) {
-            var pair: Pair<String, Double>
-            when (i) {
-              0 -> pair = Pair("$100 x " + cashNum, cashInt * 100.0)
-              1 -> pair = Pair("$50 x " + cashNum, cashInt * 50.0)
-              2 -> pair = Pair("$20 x " + cashNum, cashInt * 20.0)
-              3 -> pair = Pair("$10 x " + cashNum, cashInt * 10.0)
-              4 -> pair = Pair("$5 x " + cashNum, cashInt * 5.0)
-              5 -> pair = Pair("$2 x " + cashNum, cashInt * 2.0)
-              6 -> pair = Pair("$1 x " + cashNum, cashInt * 1.0)
-              7 -> pair = Pair("25¢ x " + cashNum, cashInt * 0.25)
-              8 -> pair = Pair("10¢ x " + cashNum, cashInt * 0.1)
-              9 -> pair = Pair("5¢ x " + cashNum, cashInt * 0.05)
-              10 -> pair = Pair("1¢ x " + cashNum, cashInt * 0.01)
-              else -> pair = Pair("0 x 0", 0.0)
-            }
-            pairList.add(pair)
-          }
-        }
-
+        val pairList = composeValueList()
         if (pairList.isNotEmpty()) {
           emitter.onNext(pairList)
         }
@@ -98,25 +83,37 @@ class InputFragment : Fragment() {
       emitter.setCancellable {
         editText.setOnClickListener(null)
       }
+
+      cashInputEmitter = emitter
     }
   }
 
-  private fun getSum(): Double {
-    val hundreds = cash_input1.findViewById<EditText>(R.id.input_text).text.toString().toInt() * 100
-    val fifties = cash_input2.findViewById<EditText>(R.id.input_text).text.toString().toInt() * 50
-    val twenties = cash_input3.findViewById<EditText>(R.id.input_text).text.toString().toInt() * 20
-    val tens = cash_input4.findViewById<EditText>(R.id.input_text).text.toString().toInt() * 10
-    val fives = cash_input5.findViewById<EditText>(R.id.input_text).text.toString().toInt() * 5
-    val toonies = cash_input6.findViewById<EditText>(R.id.input_text).text.toString().toInt() * 2
-    val loonies = cash_input7.findViewById<EditText>(R.id.input_text).text.toString().toInt() * 1
-    val quarters = cash_input8.findViewById<EditText>(
-        R.id.input_text).text.toString().toInt() * 0.25
-    val nickels = cash_input9.findViewById<EditText>(R.id.input_text).text.toString().toInt() * 0.10
-    val dimes = cash_input10.findViewById<EditText>(R.id.input_text).text.toString().toInt() * 0.05
-    val pennies = cash_input11.findViewById<EditText>(
-        R.id.input_text).text.toString().toInt() * 0.01
+  private fun composeValueList(): List<Pair<String, Double>> {
+    val pairList = mutableListOf<Pair<String, Double>>()
+    for (i in cashInputArray.indices) {
+      val cashNum = cashInputArray[i].findViewById<EditText>(R.id.input_text).text
+      val cashInt = if (cashNum.isNotEmpty()) cashNum.toString().toInt() else 0
+      if (cashInt > 0) {
+        var pair: Pair<String, Double>
+        when (i) {
+          0 -> pair = Pair("$100 x " + cashNum, cashInt * 100.0)
+          1 -> pair = Pair("$50 x " + cashNum, cashInt * 50.0)
+          2 -> pair = Pair("$20 x " + cashNum, cashInt * 20.0)
+          3 -> pair = Pair("$10 x " + cashNum, cashInt * 10.0)
+          4 -> pair = Pair("$5 x " + cashNum, cashInt * 5.0)
+          5 -> pair = Pair("$2 x " + cashNum, cashInt * 2.0)
+          6 -> pair = Pair("$1 x " + cashNum, cashInt * 1.0)
+          7 -> pair = Pair("25¢ x " + cashNum, cashInt * 0.25)
+          8 -> pair = Pair("10¢ x " + cashNum, cashInt * 0.1)
+          9 -> pair = Pair("5¢ x " + cashNum, cashInt * 0.05)
+          10 -> pair = Pair("1¢ x " + cashNum, cashInt * 0.01)
+          else -> pair = Pair("0 x 0", 0.0)
+        }
+        pairList.add(pair)
+      }
+    }
 
-    return hundreds + fifties + twenties + tens + fives + toonies + loonies + quarters + nickels + dimes + pennies
+    return pairList
   }
 }
 
