@@ -13,10 +13,12 @@
   <color name="salt_aqua_light">#C0FFEE</color>
   <color name="calm_green_light">#7EA</color>
   <color name="calm_green_dark">#5EA</color>
+  <color name="bed">#BED</color>
 
   <color name="colorPrimary">@color/midnightblue</color>
   <color name="colorPrimaryDark">@color/midnightblue</color>
   <color name="colorAccent">@color/alizarin</color>
 
   <color name="button_colour">@color/salt_aqua_light</color>
+  <color name="sum_breakdown">@color/bed</color>
 </resources>
