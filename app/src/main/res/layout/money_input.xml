@@ -16,7 +16,7 @@
     android:textSize="@dimen/money_view_height"
     android:textAllCaps="false"
     android:typeface="monospace"
-    android:textStyle="bold|italic"
+    android:textStyle="italic"
     tools:text="$ 1000" />
 
   <EditText
