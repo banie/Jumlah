@@ -54,8 +54,13 @@ class InputFragment : Fragment() {
 
       val editText = cashInputArray[i].findViewById<EditText>(R.id.input_text)
       editText.setOnFocusChangeListener { view, b ->
-        if (b) editText.hint = ""
-        else editText.hint = "0"
+        if (view == editText && b) {
+          editText.hint = ""
+          editText.isCursorVisible = true
+        } else {
+          editText.hint = "0"
+          editText.isCursorVisible = false
+        }
       }
       editText.clearFocus()
 
@@ -76,6 +81,7 @@ class InputFragment : Fragment() {
       when (motionEvent.getAction()) {
         MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE, MotionEvent.ACTION_UP -> {
           KeyboardUtil.hideKeyboard(input_container)
+          input_container.requestFocus()
         }
       }
 
