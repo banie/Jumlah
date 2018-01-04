@@ -51,12 +51,19 @@ class InputFragment : Fragment() {
         9 -> button.text = "5 ¢"
         10 -> button.text = "1 ¢"
       }
+
       val editText = cashInputArray[i].findViewById<EditText>(R.id.input_text)
       editText.setOnFocusChangeListener { view, b ->
         if (b) editText.hint = ""
         else editText.hint = "0"
       }
       editText.clearFocus()
+
+      // if the button is clicked then the corresponding edittext must have focus
+      button.setOnClickListener {
+        editText.requestFocus()
+        KeyboardUtil.showKeyboard(editText)
+      }
 
       if (i == 0) {
         cashInputStream = makeCashObservable(editText)
