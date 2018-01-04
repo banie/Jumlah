@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.banuu.android.jumlah.R
+import com.banuu.android.jumlah.extensions.KeyboardUtil
 import io.reactivex.Emitter
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.input_money_container.*
@@ -61,6 +63,16 @@ class InputFragment : Fragment() {
       } else {
         cashInputStream = Observable.merge(cashInputStream, makeCashObservable(editText))
       }
+    }
+
+    input_container.setOnTouchListener { view, motionEvent ->
+      when (motionEvent.getAction()) {
+        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE, MotionEvent.ACTION_UP -> {
+          KeyboardUtil.hideKeyboard(input_container)
+        }
+      }
+
+      true
     }
   }
 
