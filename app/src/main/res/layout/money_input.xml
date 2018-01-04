@@ -12,11 +12,12 @@
     android:layout_height="@dimen/money_input_height"
     android:background="@drawable/input_left_bg"
     android:layout_weight="1"
-    android:textColor="@color/wetasphalt"
+    android:textColor="@color/diacid"
     android:textSize="@dimen/money_view_height"
     android:textAllCaps="false"
     android:typeface="monospace"
-    tools:text="1 ¢" />
+    android:textStyle="bold|italic"
+    tools:text="$ 1000" />
 
   <EditText
     android:id="@+id/input_text"
