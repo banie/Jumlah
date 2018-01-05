@@ -21,12 +21,11 @@
 
   <EditText
     android:id="@+id/input_text"
-    android:layout_width="80dp"
+    android:layout_width="30dp"
     android:layout_height="@dimen/money_input_height"
     android:maxWidth="120dp"
     android:background="@drawable/input_right_bg"
     android:gravity="center"
-    android:hint="0"
     android:imeOptions="flagNavigateNext"
     android:inputType="number"
     android:maxLines="1"

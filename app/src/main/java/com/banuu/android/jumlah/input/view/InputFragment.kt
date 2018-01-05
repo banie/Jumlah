@@ -53,15 +53,17 @@ class InputFragment : Fragment() {
       }
 
       val editText = cashInputArray[i].findViewById<EditText>(R.id.input_text)
-      editText.setOnFocusChangeListener { view, b ->
-        if (view == editText && b) {
-          editText.hint = ""
-          editText.isCursorVisible = true
-        } else {
-          editText.hint = "0"
-          editText.isCursorVisible = false
+      editText.setOnFocusChangeListener { view, hasFocus ->
+        if (view == editText) {
+          editText.isCursorVisible = hasFocus
+          val layoutParams = editText.layoutParams
+          layoutParams.width = activity.resources.getDimensionPixelSize(
+              if (hasFocus || editText.text.isNotEmpty())
+                R.dimen.money_input_width_open else R.dimen.money_input_width_closed)
+          editText.layoutParams = layoutParams
         }
       }
+
       editText.clearFocus()
 
       // if the button is clicked then the corresponding edittext must have focus
