@@ -102,9 +102,7 @@ class InputFragment : Fragment() {
 
       editText.onTextChanged {
         val pairList = composeValueList()
-        if (pairList.isNotEmpty()) {
-          emitter.onNext(pairList)
-        }
+        emitter.onNext(pairList)
       }
 
       emitter.setCancellable {
