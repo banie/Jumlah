@@ -9,7 +9,7 @@
     android:topLeftRadius="0dp"
     android:topRightRadius="@dimen/circular_corner_radius" />
   <stroke
-    android:color="@color/button_colour"
+    android:color="@color/button_bg_color"
     android:width="@dimen/outline_stroke_width" />
   <solid android:color="@color/colorPrimary" />
 </shape>

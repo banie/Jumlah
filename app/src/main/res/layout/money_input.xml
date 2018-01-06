@@ -12,11 +12,10 @@
     android:layout_height="@dimen/money_input_height"
     android:background="@drawable/input_left_bg"
     android:layout_weight="1"
-    android:textColor="@color/diacid"
+    android:textColor="@color/button_text_color"
     android:textSize="@dimen/money_view_height"
     android:textAllCaps="false"
-    android:typeface="monospace"
-    android:textStyle="italic"
+    android:typeface="serif"
     tools:text="$ 1000" />
 
   <EditText

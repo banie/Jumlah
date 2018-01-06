@@ -17,11 +17,14 @@
   <color name="defect">#DEFEC7</color>
   <color name="foetid">#F0E71D</color>
   <color name="diacid">#D1AC1D</color>
+  <color name="confetti">#E9D460</color>
+  <color name="tahiti_gold">#E87E04</color>
 
   <color name="colorPrimary">@color/midnightblue</color>
   <color name="colorPrimaryDark">@color/midnightblue</color>
   <color name="colorAccent">@color/alizarin</color>
 
-  <color name="button_colour">@color/salt_aqua_light</color>
+  <color name="button_bg_color">@color/salt_aqua_light</color>
+  <color name="button_text_color">@color/tahiti_gold</color>
   <color name="sum_breakdown">@color/defect</color>
 </resources>
