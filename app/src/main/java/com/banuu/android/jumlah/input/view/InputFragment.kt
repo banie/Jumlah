@@ -30,7 +30,9 @@ class InputFragment : Fragment() {
                             savedInstanceState: Bundle?): View = inflater.inflate(
       R.layout.input_money_container, container, false)
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewStateRestored(savedInstanceState: Bundle?) {
+    super.onViewStateRestored(savedInstanceState)
+
     cashInputArray = arrayOf(
         cash_input1, cash_input2, cash_input3, cash_input4, cash_input5,
         cash_input6, cash_input7, cash_input8, cash_input9, cash_input10,
@@ -55,15 +57,15 @@ class InputFragment : Fragment() {
       val editText = cashInputArray[i].findViewById<EditText>(R.id.input_text)
       editText.setOnFocusChangeListener { view, hasFocus ->
         if (view == editText) {
-          editText.isCursorVisible = hasFocus
-          val layoutParams = editText.layoutParams
-          layoutParams.width = activity.resources.getDimensionPixelSize(
-              if (hasFocus || editText.text.isNotEmpty())
-                R.dimen.money_input_width_open else R.dimen.money_input_width_closed)
-          editText.layoutParams = layoutParams
+          updateEditTextWidth(editText)
         }
       }
 
+      // return the text back if there was some from the saved instance state
+      editText.setText(savedInstanceState?.getString(Integer.toString(i), ""))
+      updateEditTextWidth(editText)
+
+      // clear focus just in case so there is no button open
       editText.clearFocus()
 
       // if the button is clicked then the corresponding edittext must have focus
@@ -79,11 +81,13 @@ class InputFragment : Fragment() {
       }
     }
 
+    // to make sure none of the cash input has input at this point
+    hideKeyboardAndFocus()
+
     input_container.setOnTouchListener { view, motionEvent ->
       when (motionEvent.getAction()) {
         MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE, MotionEvent.ACTION_UP -> {
-          KeyboardUtil.hideKeyboard(input_container)
-          input_container.requestFocus()
+          hideKeyboardAndFocus()
         }
       }
 
@@ -95,6 +99,34 @@ class InputFragment : Fragment() {
     super.onResume()
 
     cashInputEmitter.onNext(composeValueList())
+  }
+
+  override fun onSaveInstanceState(outState: Bundle?) {
+    for (i in cashInputArray.indices) {
+      val editText = cashInputArray[i].findViewById<EditText>(R.id.input_text)
+
+      if (editText.text.isNotEmpty()) {
+        outState?.putString(Integer.toString(i), editText.text.toString())
+      }
+    }
+
+    super.onSaveInstanceState(outState)
+  }
+
+  private fun updateEditTextWidth(editText: EditText) {
+    val hasFocus = editText.hasFocus()
+    val layoutParams = editText.layoutParams
+    editText.isCursorVisible = hasFocus
+
+    layoutParams.width = activity.resources.getDimensionPixelSize(
+        if (hasFocus || editText.text.isNotEmpty())
+          R.dimen.money_input_width_open else R.dimen.money_input_width_closed)
+    editText.layoutParams = layoutParams
+  }
+
+  private fun hideKeyboardAndFocus() {
+    KeyboardUtil.hideKeyboard(input_container)
+    input_container.requestFocus()
   }
 
   private fun makeCashObservable(editText: EditText): Observable<List<Pair<String, Double>>> {
