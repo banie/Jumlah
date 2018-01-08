@@ -74,12 +74,8 @@ class InputFragment : Fragment() {
         }
       }
 
-      // clear focus just in case so there is no button open
-      editText.clearFocus()
-
       // return the text back if there was some from the saved instance state
       editText.setText(savedInstanceState?.getString(Integer.toString(i), ""))
-      updateEditTextWidth(editText)
 
       // if the button is clicked then the corresponding edittext must have focus
       button.setOnClickListener {
@@ -98,7 +94,7 @@ class InputFragment : Fragment() {
   override fun onResume() {
     super.onResume()
 
-    clearFocusFromAll()
+    updateEditTextUi()
 
     updateButtonTextColor()
 
@@ -181,8 +177,12 @@ class InputFragment : Fragment() {
     return pairList
   }
 
-  private fun clearFocusFromAll() {
-    cashInputArray.map { it.clearFocus() }
+  private fun updateEditTextUi() {
+    cashInputArray.map {
+      it.clearFocus()
+      val cashText = it.findViewById<EditText>(R.id.input_text)
+      updateEditTextWidth(cashText)
+    }
   }
 
   private fun updateButtonTextColor() { // TODO improve so that we dont loop for the whole cash input list
