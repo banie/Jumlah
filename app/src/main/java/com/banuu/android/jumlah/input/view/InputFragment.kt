@@ -38,6 +38,19 @@ class InputFragment : Fragment() {
         cash_input6, cash_input7, cash_input8, cash_input9, cash_input10,
         cash_input11)
 
+    // to make sure none of the cash input has input at this point
+    hideKeyboardAndFocus()
+
+    input_container.setOnTouchListener { view, motionEvent ->
+      when (motionEvent.getAction()) {
+        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE, MotionEvent.ACTION_UP -> {
+          hideKeyboardAndFocus()
+        }
+      }
+
+      true
+    }
+
     for (i in cashInputArray.indices) {
       val button = cashInputArray[i].findViewById<Button>(R.id.input_btn)
       when (i) {
@@ -61,12 +74,12 @@ class InputFragment : Fragment() {
         }
       }
 
+      // clear focus just in case so there is no button open
+      editText.clearFocus()
+
       // return the text back if there was some from the saved instance state
       editText.setText(savedInstanceState?.getString(Integer.toString(i), ""))
       updateEditTextWidth(editText)
-
-      // clear focus just in case so there is no button open
-      editText.clearFocus()
 
       // if the button is clicked then the corresponding edittext must have focus
       button.setOnClickListener {
@@ -80,23 +93,12 @@ class InputFragment : Fragment() {
         cashInputStream = Observable.merge(cashInputStream, makeCashObservable(editText))
       }
     }
-
-    // to make sure none of the cash input has input at this point
-    hideKeyboardAndFocus()
-
-    input_container.setOnTouchListener { view, motionEvent ->
-      when (motionEvent.getAction()) {
-        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE, MotionEvent.ACTION_UP -> {
-          hideKeyboardAndFocus()
-        }
-      }
-
-      true
-    }
   }
 
   override fun onResume() {
     super.onResume()
+
+    clearFocusFromAll()
 
     cashInputEmitter.onNext(composeValueList())
   }
@@ -109,6 +111,8 @@ class InputFragment : Fragment() {
         outState?.putString(Integer.toString(i), editText.text.toString())
       }
     }
+
+    hideKeyboardAndFocus()
 
     super.onSaveInstanceState(outState)
   }
@@ -171,6 +175,10 @@ class InputFragment : Fragment() {
     }
 
     return pairList
+  }
+
+  private fun clearFocusFromAll() {
+    cashInputArray.map { it.clearFocus() }
   }
 }
 
