@@ -12,7 +12,7 @@
     android:layout_height="@dimen/money_input_height"
     android:background="@drawable/input_left_bg"
     android:layout_weight="1"
-    android:textColor="@color/button_text_color"
+    android:textColor="@color/btn_txt_color_empty"
     android:textSize="@dimen/money_view_height"
     android:textAllCaps="false"
     android:typeface="serif"

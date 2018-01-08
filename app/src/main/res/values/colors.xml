@@ -24,7 +24,8 @@
   <color name="colorPrimaryDark">@color/midnightblue</color>
   <color name="colorAccent">@color/alizarin</color>
 
-  <color name="button_bg_color">@color/salt_aqua_light</color>
-  <color name="button_text_color">@color/tahiti_gold</color>
+  <color name="btn_bg_color">@color/salt_aqua_light</color>
+  <color name="btn_txt_color_empty">@color/wetasphalt</color>
+  <color name="btn_txt_color_filled">@color/tahiti_gold</color>
   <color name="sum_breakdown">@color/defect</color>
 </resources>

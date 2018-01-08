@@ -100,6 +100,8 @@ class InputFragment : Fragment() {
 
     clearFocusFromAll()
 
+    updateButtonTextColor()
+
     cashInputEmitter.onNext(composeValueList())
   }
 
@@ -137,6 +139,8 @@ class InputFragment : Fragment() {
     return Observable.create<List<Pair<String, Double>>> { emitter ->
 
       editText.onTextChanged {
+        updateButtonTextColor()
+
         val pairList = composeValueList()
         emitter.onNext(pairList)
       }
@@ -179,6 +183,17 @@ class InputFragment : Fragment() {
 
   private fun clearFocusFromAll() {
     cashInputArray.map { it.clearFocus() }
+  }
+
+  private fun updateButtonTextColor() { // TODO improve so that we dont loop for the whole cash input list
+    cashInputArray.map {
+      val cashText = it.findViewById<EditText>(R.id.input_text).text
+      val button = it.findViewById<Button>(R.id.input_btn)
+
+      button.setTextColor(
+          activity.resources.getColor(
+              if (cashText.isNotEmpty()) R.color.btn_txt_color_filled else R.color.btn_txt_color_empty))
+    }
   }
 }
 
