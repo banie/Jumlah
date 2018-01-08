@@ -1,84 +1,60 @@
 package com.banuu.android.jumlah
 
+import android.app.Fragment
+import android.app.FragmentManager
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
+import com.banuu.android.jumlah.input.view.InputFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.main_cordinator.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
+  private var inputStreamDisposable: Disposable? = null
+  private var totalSum = 0.0
+  private var totalLabel = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    setContentView(R.layout.main_cordinator)
     setSupportActionBar(toolbar)
 
-    fab.setOnClickListener { view ->
-      Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-          .setAction("Action", null).show()
-    }
+    supportActionBar?.setDisplayShowTitleEnabled(false)
 
-    val toggle = ActionBarDrawerToggle(
-        this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-    drawer_layout.addDrawerListener(toggle)
-    toggle.syncState()
-
-    nav_view.setNavigationItemSelectedListener(this)
+    //    fab.setOnClickListener { view ->
+    //      Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction(
+    //          "Action", null).show()
+    //    }
   }
 
-  override fun onBackPressed() {
-    if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-      drawer_layout.closeDrawer(GravityCompat.START)
-    } else {
-      super.onBackPressed()
-    }
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    menuInflater.inflate(R.menu.main, menu)
-    return true
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    when (item.itemId) {
-      R.id.action_settings -> return true
-      else -> return super.onOptionsItemSelected(item)
+  override fun onStart() {
+    super.onStart()
+    val manager: FragmentManager = fragmentManager
+    val inputFragment: Fragment? = manager.findFragmentById(R.id.input_fragment)
+    if (inputFragment is InputFragment) {
+      inputStreamDisposable = inputFragment.cashInputStream
+          .observeOn(Schedulers.computation())
+          .map { computeSum(it) }
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe {
+            sum_breakdown.text = totalLabel
+            sum_label.text = "$ " + totalSum.toString()
+          }
     }
   }
 
-  override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    // Handle navigation view item clicks here.
-    when (item.itemId) {
-      R.id.nav_camera -> {
-        // Handle the camera action
-      }
-      R.id.nav_gallery -> {
+  override fun onStop() {
+    super.onStop()
+    inputStreamDisposable?.let { if (it.isDisposed) it.dispose() }
+  }
 
-      }
-      R.id.nav_slideshow -> {
-
-      }
-      R.id.nav_manage -> {
-
-      }
-      R.id.nav_share -> {
-
-      }
-      R.id.nav_send -> {
-
-      }
+  private fun computeSum(cashList: List<Pair<String, Double>>) {
+    totalLabel = ""
+    totalSum = 0.0
+    for (cash in cashList) {
+      totalLabel += "(" + cash.first + ")" + if (cash != cashList.last()) " + " else ""
+      totalSum += cash.second
     }
-
-    drawer_layout.closeDrawer(GravityCompat.START)
-    return true
   }
 }

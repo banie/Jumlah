@@ -7,30 +7,32 @@
   android:orientation="horizontal">
 
   <Button
+    android:id="@+id/input_btn"
     android:layout_width="0dp"
     android:layout_height="@dimen/money_input_height"
     android:background="@drawable/input_left_bg"
     android:layout_weight="1"
-    android:textColor="@color/midnightblue"
-    android:textSize="@dimen/money_text_height"
-    android:typeface="monospace"
-    tools:text="$20" />
+    android:textColor="@color/btn_txt_color_empty"
+    android:textSize="@dimen/money_view_height"
+    android:textAllCaps="false"
+    android:typeface="serif"
+    tools:text="$ 1000" />
 
   <EditText
-    android:id="@+id/input1"
-    android:layout_width="80dp"
+    android:id="@+id/input_text"
+    android:layout_width="30dp"
     android:layout_height="@dimen/money_input_height"
     android:maxWidth="120dp"
     android:background="@drawable/input_right_bg"
     android:gravity="center"
-    android:hint="0"
     android:imeOptions="flagNavigateNext"
     android:inputType="number"
     android:maxLines="1"
     android:textColor="@color/white"
     android:textColorHint="@color/white"
-    android:textCursorDrawable="@color/white"
-    android:textSize="@dimen/money_text_height"
+    android:textCursorDrawable="@null"
+    android:cursorVisible="true"
+    android:textSize="@dimen/money_edit_height"
     android:typeface="sans" />
 
 </LinearLayout>
