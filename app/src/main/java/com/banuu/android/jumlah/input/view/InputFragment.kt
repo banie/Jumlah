@@ -61,10 +61,10 @@ class InputFragment : Fragment() {
         4 -> button.text = "$5"
         5 -> button.text = "$2"
         6 -> button.text = "$1"
-        7 -> button.text = "25 ¢"
-        8 -> button.text = "10 ¢"
-        9 -> button.text = "5 ¢"
-        10 -> button.text = "1 ¢"
+        7 -> button.text = "25¢"
+        8 -> button.text = "10¢"
+        9 -> button.text = "5¢"
+        10 -> button.text = "1¢"
       }
 
       val editText = cashInputArray[i].findViewById<EditText>(R.id.input_text)
@@ -185,7 +185,7 @@ class InputFragment : Fragment() {
     }
   }
 
-  private fun updateButtonTextColor() { // TODO improve so that we dont loop for the whole cash input list
+  private fun updateButtonTextColor() {
     cashInputArray.map {
       val cashText = it.findViewById<EditText>(R.id.input_text).text
       val button = it.findViewById<Button>(R.id.input_btn)
@@ -194,6 +194,27 @@ class InputFragment : Fragment() {
           activity.resources.getColor(
               if (cashText.isNotEmpty()) R.color.btn_txt_color_filled else R.color.btn_txt_color_empty))
     }
+  }
+
+  fun makeCsvData() : String {
+    val firstLine = StringBuffer()
+    val secondLine = StringBuffer()
+    val indices = cashInputArray.indices
+
+    for (i in indices) {
+      val cashLabel = cashInputArray[i].findViewById<Button>(R.id.input_btn).text.toString()
+      var cashNum = cashInputArray[i].findViewById<EditText>(R.id.input_text).text.toString()
+      cashNum = if (cashNum.isNotEmpty()) cashNum else "0"
+
+      firstLine.append(cashLabel)
+      secondLine.append(cashNum)
+      if (i != cashInputArray.indices.last) {
+        firstLine.append(",")
+        secondLine.append(",")
+      }
+    }
+
+    return firstLine.toString() + System.getProperty("line.separator") + secondLine.toString()
   }
 }
 
