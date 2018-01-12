@@ -1,8 +1,9 @@
 package com.banuu.android.jumlah
 
 import android.app.Fragment
-import android.app.FragmentManager
+import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import com.banuu.android.jumlah.input.view.InputFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,16 +23,17 @@ class MainActivity : AppCompatActivity() {
 
     supportActionBar?.setDisplayShowTitleEnabled(false)
 
-    //    fab.setOnClickListener { view ->
-    //      Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction(
-    //          "Action", null).show()
-    //    }
+    fab.setOnClickListener { view ->
+//      Snackbar.make(view, getCsvText(), Snackbar.LENGTH_LONG).setAction(
+//          "Action", null).show()
+      sendShareIntent()
+    }
   }
 
   override fun onStart() {
     super.onStart()
-    val manager: FragmentManager = fragmentManager
-    val inputFragment: Fragment? = manager.findFragmentById(R.id.input_fragment)
+
+    val inputFragment: Fragment? = fragmentManager.findFragmentById(R.id.input_fragment)
     if (inputFragment is InputFragment) {
       inputStreamDisposable = inputFragment.cashInputStream
           .observeOn(Schedulers.computation())
@@ -56,5 +58,26 @@ class MainActivity : AppCompatActivity() {
       totalLabel += "(" + cash.first + ")" + if (cash != cashList.last()) " + " else ""
       totalSum += cash.second
     }
+  }
+
+  private fun getCsvText() : String {
+    var result = ""
+
+    val inputFragment: Fragment? = fragmentManager.findFragmentById(R.id.input_fragment)
+    if (inputFragment is InputFragment) {
+      result = inputFragment.makeCsvData()
+    }
+
+    return result
+  }
+
+  private fun sendShareIntent() {
+    val csvText = getCsvText()
+    val shareIntent = Intent(Intent.ACTION_SEND)
+
+    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here")
+    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, csvText)
+    shareIntent.type = "text/plain"
+    startActivity(Intent.createChooser(shareIntent, "Share via"))
   }
 }
