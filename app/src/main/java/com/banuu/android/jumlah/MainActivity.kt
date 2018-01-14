@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
-import com.banuu.android.jumlah.util.RecordUtil
+import com.banuu.android.jumlah.extensions.shareFile
+import com.banuu.android.jumlah.extensions.shareText
 import com.banuu.android.jumlah.input.view.InputFragment
+import com.banuu.android.jumlah.util.RecordUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -80,10 +82,7 @@ class MainActivity : AppCompatActivity() {
     val csvText = getRecordText()
     val shareIntent = Intent(Intent.ACTION_SEND)
 
-    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here")
-    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, csvText)
-    shareIntent.type = "text/plain"
-    startActivity(Intent.createChooser(shareIntent, "Share text via"))
+    shareIntent.shareText(this, csvText)
   }
 
   private fun sendShareCsvFileIntent() {
@@ -95,11 +94,6 @@ class MainActivity : AppCompatActivity() {
     val fileUri = FileProvider.getUriForFile(this, "com.banuu.android.jumlah.fileprovider", file)
     val shareIntent = Intent(Intent.ACTION_SEND)
 
-    shareIntent.addFlags(
-        Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, file.name)
-    shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
-    shareIntent.type = "records/csv"
-    startActivity(Intent.createChooser(shareIntent, "Share csv file via"))
+    shareIntent.shareFile(this, fileUri, file.name)
   }
 }
