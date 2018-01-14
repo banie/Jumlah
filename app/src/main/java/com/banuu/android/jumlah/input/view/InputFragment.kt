@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.banuu.android.jumlah.R
-import com.banuu.android.jumlah.extensions.KeyboardUtil
+import com.banuu.android.jumlah.util.KeyboardUtil
 import io.reactivex.Emitter
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.input_money_container.*
