@@ -1,8 +1,10 @@
-package com.banuu.android.jumlah.extensions
+package com.banuu.android.jumlah.util
 
 import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.banuu.android.jumlah.extensions.hideKeyboard
+import com.banuu.android.jumlah.extensions.showKeyboard
 
 /**
  * Created by banie on 2018-01-03.
@@ -20,12 +22,4 @@ class KeyboardUtil {
       imm.hideKeyboard(view)
     }
   }
-}
-
-fun InputMethodManager.showKeyboard() {
-  toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
-}
-
-fun InputMethodManager.hideKeyboard(view: View) {
-  hideSoftInputFromWindow(view.windowToken, 0)
 }
