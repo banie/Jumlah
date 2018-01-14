@@ -3,8 +3,9 @@ package com.banuu.android.jumlah
 import android.app.Fragment
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import com.banuu.android.jumlah.util.RecordUtil
 import com.banuu.android.jumlah.input.view.InputFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -24,10 +25,14 @@ class MainActivity : AppCompatActivity() {
     supportActionBar?.setDisplayShowTitleEnabled(false)
 
     fab.setOnClickListener { view ->
-//      Snackbar.make(view, getCsvText(), Snackbar.LENGTH_LONG).setAction(
-//          "Action", null).show()
-      sendShareIntent()
+      //      Snackbar.make(view, getRecordText(), Snackbar.LENGTH_LONG).setAction(
+      //          "Action", null).show()
+
+      //      sendShareTextIntent()
+
+      sendShareCsvFileIntent()
     }
+
   }
 
   override fun onStart() {
@@ -60,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private fun getCsvText() : String {
+  private fun getRecordText(): String {
     var result = ""
 
     val inputFragment: Fragment? = fragmentManager.findFragmentById(R.id.input_fragment)
@@ -71,13 +76,30 @@ class MainActivity : AppCompatActivity() {
     return result
   }
 
-  private fun sendShareIntent() {
-    val csvText = getCsvText()
+  private fun sendShareTextIntent() {
+    val csvText = getRecordText()
     val shareIntent = Intent(Intent.ACTION_SEND)
 
     shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here")
     shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, csvText)
     shareIntent.type = "text/plain"
-    startActivity(Intent.createChooser(shareIntent, "Share via"))
+    startActivity(Intent.createChooser(shareIntent, "Share text via"))
+  }
+
+  private fun sendShareCsvFileIntent() {
+    val csvText = getRecordText()
+    val csvFileName = RecordUtil.makeCsvFilename()
+
+    // save the file 1st
+    val file = RecordUtil.saveRecordToFile(this, csvText, csvFileName)
+    val fileUri = FileProvider.getUriForFile(this, "com.banuu.android.jumlah.fileprovider", file)
+    val shareIntent = Intent(Intent.ACTION_SEND)
+
+    shareIntent.addFlags(
+        Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, file.name)
+    shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri)
+    shareIntent.type = "records/csv"
+    startActivity(Intent.createChooser(shareIntent, "Share csv file via"))
   }
 }
