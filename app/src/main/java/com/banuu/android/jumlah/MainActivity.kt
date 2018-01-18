@@ -26,15 +26,17 @@ class MainActivity : AppCompatActivity() {
 
     supportActionBar?.setDisplayShowTitleEnabled(false)
 
-    fab.setOnClickListener { view ->
-      //      Snackbar.make(view, getRecordText(), Snackbar.LENGTH_LONG).setAction(
-      //          "Action", null).show()
-
-      //      sendShareTextIntent()
-
-      sendShareCsvFileIntent()
+    fab_total.setOnClickListener { view ->
+      sendShareTotalIntent()
     }
 
+    fab_txt.setOnClickListener { view ->
+      sendShareTextIntent()
+    }
+
+    fab_csv.setOnClickListener { view ->
+      sendShareCsvFileIntent()
+    }
   }
 
   override fun onStart() {
@@ -76,6 +78,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     return result
+  }
+
+  private fun sendShareTotalIntent() {
+    val shareIntent = Intent(Intent.ACTION_SEND)
+
+    shareIntent.shareText(this, "$ " + totalSum.toString())
   }
 
   private fun sendShareTextIntent() {
