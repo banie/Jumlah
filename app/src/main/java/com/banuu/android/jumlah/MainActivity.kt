@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.banuu.android.jumlah.extensions.shareFile
 import com.banuu.android.jumlah.extensions.shareText
 import com.banuu.android.jumlah.input.view.InputFragment
@@ -12,6 +13,7 @@ import com.banuu.android.jumlah.util.RecordUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.input_money_container.*
 import kotlinx.android.synthetic.main.main_cordinator.*
 
 class MainActivity : AppCompatActivity() {
@@ -23,26 +25,15 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.main_cordinator)
     setSupportActionBar(toolbar)
+    setFabBehaviors()
 
     supportActionBar?.setDisplayShowTitleEnabled(false)
-
-    fab_total.setOnClickListener { view ->
-      sendShareTotalIntent()
-    }
-
-    fab_txt.setOnClickListener { view ->
-      sendShareTextIntent()
-    }
-
-    fab_csv.setOnClickListener { view ->
-      sendShareCsvFileIntent()
-    }
   }
 
   override fun onStart() {
     super.onStart()
 
-    val inputFragment: Fragment? = fragmentManager.findFragmentById(R.id.input_fragment)
+    val inputFragment = getInputFragment()
     if (inputFragment is InputFragment) {
       inputStreamDisposable = inputFragment.cashInputStream
           .observeOn(Schedulers.computation())
@@ -60,6 +51,24 @@ class MainActivity : AppCompatActivity() {
     inputStreamDisposable?.let { if (it.isDisposed) it.dispose() }
   }
 
+  private fun setFabBehaviors() {
+    fab_menu.setOnMenuToggleListener { opened ->
+      getInputFragment()?.view?.alpha = if (opened) 0.05f else 1f
+    }
+
+    fab_total.setOnClickListener { view ->
+      sendShareTotalIntent()
+    }
+
+    fab_txt.setOnClickListener { view ->
+      sendShareTextIntent()
+    }
+
+    fab_csv.setOnClickListener { view ->
+      sendShareCsvFileIntent()
+    }
+  }
+
   private fun computeSum(cashList: List<Pair<String, Double>>) {
     totalLabel = ""
     totalSum = 0.0
@@ -72,12 +81,16 @@ class MainActivity : AppCompatActivity() {
   private fun getRecordText(): String {
     var result = ""
 
-    val inputFragment: Fragment? = fragmentManager.findFragmentById(R.id.input_fragment)
+    val inputFragment = getInputFragment()
     if (inputFragment is InputFragment) {
       result = inputFragment.makeCsvData()
     }
 
     return result
+  }
+
+  private fun getInputFragment(): Fragment? {
+    return fragmentManager.findFragmentById(R.id.input_fragment)
   }
 
   private fun sendShareTotalIntent() {
