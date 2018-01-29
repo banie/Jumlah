@@ -1,0 +1,27 @@
+<vector
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="108dp"
+  android:height="108dp"
+  android:viewportHeight="108"
+  android:viewportWidth="108">
+    <path
+      android:pathData="
+        M 70, 69
+        m -10, 0
+        a 10,10 0 1,0 20,0
+        a 10,10 0 1,0 -20,0
+        "
+      android:fillColor="@color/btn_bg_color"
+      android:strokeColor="#00000000"
+      android:strokeWidth="1"/>
+    <path
+      android:fillColor="#00000000"
+      android:pathData="M63,69L78,69"
+      android:strokeColor="@color/white"
+      android:strokeWidth="1" />
+    <path
+      android:fillColor="#00000000"
+      android:pathData="M70,61L70,77"
+      android:strokeColor="@color/white"
+      android:strokeWidth="1" />
+</vector>
