@@ -6,22 +6,22 @@
   android:viewportWidth="108">
     <path
       android:pathData="
-        M 70, 69
-        m -10, 0
-        a 10,10 0 1,0 20,0
-        a 10,10 0 1,0 -20,0
+        M 63, 69
+        m -15, 0
+        a 15,15 0 1,0 30,0
+        a 15,15 0 1,0 -30,0
         "
       android:fillColor="@color/btn_bg_color"
       android:strokeColor="#00000000"
       android:strokeWidth="1"/>
     <path
       android:fillColor="#00000000"
-      android:pathData="M63,69L78,69"
-      android:strokeColor="@color/white"
-      android:strokeWidth="1" />
+      android:pathData="M51,69L76,69"
+      android:strokeColor="@color/colorAccent"
+      android:strokeWidth="2" />
     <path
       android:fillColor="#00000000"
-      android:pathData="M70,61L70,77"
-      android:strokeColor="@color/white"
-      android:strokeWidth="1" />
+      android:pathData="M63,56L63,82"
+      android:strokeColor="@color/colorAccent"
+      android:strokeWidth="2" />
 </vector>
