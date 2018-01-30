@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
 import com.banuu.android.jumlah.extensions.shareFile
 import com.banuu.android.jumlah.extensions.shareText
 import com.banuu.android.jumlah.input.view.InputFragment
@@ -13,10 +12,11 @@ import com.banuu.android.jumlah.util.RecordUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.input_money_container.*
 import kotlinx.android.synthetic.main.main_cordinator.*
+import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
+  private val decimalFormatter = DecimalFormat("###,###.00")
   private var inputStreamDisposable: Disposable? = null
   private var totalSum = 0.0
   private var totalLabel = ""
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe {
             sum_breakdown.text = totalLabel
-            sum_label.text = "$ " + totalSum.toString()
+            sum_label.text = "$ " + formatTotalSum()
           }
     }
   }
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
   private fun sendShareTotalIntent() {
     val shareIntent = Intent(Intent.ACTION_SEND)
 
-    shareIntent.shareText(this, "$ " + totalSum.toString())
+    shareIntent.shareText(this, "$ " + formatTotalSum())
   }
 
   private fun sendShareTextIntent() {
@@ -116,5 +116,9 @@ class MainActivity : AppCompatActivity() {
     val shareIntent = Intent(Intent.ACTION_SEND)
 
     shareIntent.shareFile(this, fileUri, file.name)
+  }
+
+  private fun formatTotalSum(): String {
+    return decimalFormatter.format(totalSum)
   }
 }
