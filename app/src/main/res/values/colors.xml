@@ -19,6 +19,7 @@
   <color name="diacid">#D1AC1D</color>
   <color name="confetti">#E9D460</color>
   <color name="tahiti_gold">#E87E04</color>
+  <color name="semi_transparent_white">#E6FFFFFF</color>
 
   <color name="colorPrimary">@color/midnightblue</color>
   <color name="colorPrimaryDark">@color/midnightblue</color>
