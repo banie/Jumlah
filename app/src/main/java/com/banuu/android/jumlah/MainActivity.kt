@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
   private var inputStreamDisposable: Disposable? = null
   private var totalSum = 0.0
   private var totalLabel = ""
+  private var fabMenuIsShown = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -51,8 +52,17 @@ class MainActivity : AppCompatActivity() {
     inputStreamDisposable?.let { if (it.isDisposed) it.dispose() }
   }
 
+  override fun onBackPressed() {
+    if (fabMenuIsShown) {
+      fab_menu.close(true)
+    } else {
+      super.onBackPressed()
+    }
+  }
+
   private fun setFabBehaviors() {
     fab_menu.setOnMenuToggleListener { opened ->
+      fabMenuIsShown = opened
       getInputFragment()?.view?.alpha = if (opened) 0.05f else 1f
     }
 
