@@ -5,6 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+  signingConfigs {
+    auto_sign_config {
+      keyAlias 'AndroidAppsKey'
+      keyPassword 'glad t1d1ngs to th3 strang3rs'
+      storeFile file('/Users/bsetijoso/Google Drive/key/android_apps_keystore.jks')
+      storePassword 'k33p th3 w0rld 1n my h@nds'
+    }
+  }
   compileSdkVersion 26
   defaultConfig {
     applicationId "com.banuu.android.jumlah"
@@ -19,12 +27,13 @@ android {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.auto_sign_config
     }
   }
 }
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation fileTree(include: ['*.jar'], dir: 'libs')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
   implementation 'com.android.support:appcompat-v7:26.1.0'
   implementation 'com.android.support:design:26.1.0'
@@ -32,7 +41,7 @@ dependencies {
   implementation 'com.android.support:support-vector-drawable:26.1.0'
   implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
   implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
-  implementation 'com.github.clans:fab:1.6.4'
+  implementation 'com.getbase:floatingactionbutton:1.10.1'
   testImplementation 'junit:junit:4.12'
   androidTestImplementation 'com.android.support.test:runner:1.0.1'
   androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
