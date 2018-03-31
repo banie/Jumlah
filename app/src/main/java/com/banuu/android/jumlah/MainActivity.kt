@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.banuu.android.jumlah.extensions.shareFile
 import com.banuu.android.jumlah.extensions.shareText
 import com.banuu.android.jumlah.input.view.InputFragment
 import com.banuu.android.jumlah.util.RecordUtil
+import com.getbase.floatingactionbutton.FloatingActionsMenu
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -54,29 +56,49 @@ class MainActivity : AppCompatActivity() {
 
   override fun onBackPressed() {
     if (fabMenuIsShown) {
-      fab_menu.close(true)
+      fab_menu.collapse()
     } else {
       super.onBackPressed()
     }
   }
 
   private fun setFabBehaviors() {
-    fab_menu.setOnMenuToggleListener { opened ->
-      fabMenuIsShown = opened
-      getInputFragment()?.view?.alpha = if (opened) 0.05f else 1f
-    }
+    fab_menu.setOnFloatingActionsMenuUpdateListener(
+        object : FloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
+          override fun onMenuExpanded() {
+            onFabMenuOpened(true)
+          }
 
-    fab_total.setOnClickListener { view ->
+          override fun onMenuCollapsed() {
+            onFabMenuOpened(false)
+          }
+        })
+
+    //    fab_menu.expand()
+    //    fab_menu.collapse()
+
+    fab_total.setOnClickListener { _ ->
       sendShareTotalIntent()
     }
 
-    fab_txt.setOnClickListener { view ->
+    fab_txt.setOnClickListener { _ ->
       sendShareTextIntent()
     }
 
-    fab_csv.setOnClickListener { view ->
+    fab_csv.setOnClickListener { _ ->
       sendShareCsvFileIntent()
     }
+
+    input_disabler.setOnClickListener { _ ->
+      if (fabMenuIsShown) {
+        fab_menu.collapse()
+      }
+    }
+  }
+
+  private fun onFabMenuOpened(opened: Boolean) {
+    fabMenuIsShown = opened
+    input_disabler.visibility = if (opened) View.VISIBLE else View.GONE
   }
 
   private fun computeSum(cashList: List<Pair<String, Double>>) {
