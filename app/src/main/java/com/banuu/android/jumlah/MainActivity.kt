@@ -5,21 +5,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
+import android.view.View
 import com.banuu.android.jumlah.extensions.shareFile
 import com.banuu.android.jumlah.extensions.shareText
 import com.banuu.android.jumlah.input.view.InputFragment
 import com.banuu.android.jumlah.util.RecordUtil
+import com.getbase.floatingactionbutton.FloatingActionsMenu
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.input_money_container.*
 import kotlinx.android.synthetic.main.main_cordinator.*
+import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
+  private val decimalFormatter = DecimalFormat("###,###.00")
   private var inputStreamDisposable: Disposable? = null
   private var totalSum = 0.0
   private var totalLabel = ""
+  private var fabMenuIsShown = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity() {
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe {
             sum_breakdown.text = totalLabel
-            sum_label.text = "$ " + totalSum.toString()
+            sum_label.text = "$ " + formatTotalSum()
           }
     }
   }
@@ -51,22 +54,51 @@ class MainActivity : AppCompatActivity() {
     inputStreamDisposable?.let { if (it.isDisposed) it.dispose() }
   }
 
-  private fun setFabBehaviors() {
-    fab_menu.setOnMenuToggleListener { opened ->
-      getInputFragment()?.view?.alpha = if (opened) 0.05f else 1f
+  override fun onBackPressed() {
+    if (fabMenuIsShown) {
+      fab_menu.collapse()
+    } else {
+      super.onBackPressed()
     }
+  }
 
-    fab_total.setOnClickListener { view ->
+  private fun setFabBehaviors() {
+    fab_menu.setOnFloatingActionsMenuUpdateListener(
+        object : FloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
+          override fun onMenuExpanded() {
+            onFabMenuOpened(true)
+          }
+
+          override fun onMenuCollapsed() {
+            onFabMenuOpened(false)
+          }
+        })
+
+    //    fab_menu.expand()
+    //    fab_menu.collapse()
+
+    fab_total.setOnClickListener { _ ->
       sendShareTotalIntent()
     }
 
-    fab_txt.setOnClickListener { view ->
+    fab_txt.setOnClickListener { _ ->
       sendShareTextIntent()
     }
 
-    fab_csv.setOnClickListener { view ->
+    fab_csv.setOnClickListener { _ ->
       sendShareCsvFileIntent()
     }
+
+    input_disabler.setOnClickListener { _ ->
+      if (fabMenuIsShown) {
+        fab_menu.collapse()
+      }
+    }
+  }
+
+  private fun onFabMenuOpened(opened: Boolean) {
+    fabMenuIsShown = opened
+    input_disabler.visibility = if (opened) View.VISIBLE else View.GONE
   }
 
   private fun computeSum(cashList: List<Pair<String, Double>>) {
@@ -96,7 +128,7 @@ class MainActivity : AppCompatActivity() {
   private fun sendShareTotalIntent() {
     val shareIntent = Intent(Intent.ACTION_SEND)
 
-    shareIntent.shareText(this, "$ " + totalSum.toString())
+    shareIntent.shareText(this, "$ " + formatTotalSum())
   }
 
   private fun sendShareTextIntent() {
@@ -116,5 +148,9 @@ class MainActivity : AppCompatActivity() {
     val shareIntent = Intent(Intent.ACTION_SEND)
 
     shareIntent.shareFile(this, fileUri, file.name)
+  }
+
+  private fun formatTotalSum(): String {
+    return decimalFormatter.format(totalSum)
   }
 }
